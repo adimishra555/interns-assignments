@@ -1,0 +1,149 @@
+
+=================================================================>1
+# ! this is the first solution for the given assignment...
+import difflib
+def approximate_search(query, string_set, k):    
+    scores = [(difflib.SequenceMatcher(None, query, string).ratio(), string) for string in string_set]    
+    scores.sort(reverse=True)   
+    top_k_strings = [result[1] for result in scores[:k]]
+    return top_k_strings
+
+if __name__ == "__main__":   
+    string_set = ["absolutely", "abstraction", "activism", "active", "activist", "activity"]
+    while True:
+        user_input = input("Enter the string>> ").strip().lower()
+
+        if user_input == 'exit':
+            break
+        result = approximate_search(user_input, string_set, k=3)
+        print("Output >>", ", ".join(result))
+
+
+# ! output of this program is -
+''' 
+Enter the string>> abslutly
+Output >> absolutely, abstraction, activity
+Enter the string>> actv
+Output >> active, activity, activist
+
+'''
+
+===================================================>2
+
+# ! this is the second solution of the assignment...
+
+
+# ? we will take two txt file first is for input and second it will give the output & store it in the output.txt file...
+
+
+import re
+
+def solve_expression(expression):
+    try:
+        result = eval(expression)
+        return result
+    except Exception as e:
+        print(f"Error solving expression '{expression}': {e}")
+        return None
+
+def process_file(input_file, output_file):
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        for line in infile:
+            line = line.strip()
+            if line:
+                expression = re.sub(r'[^0-9+\-*/^().\[\]{}]', '', line) 
+                result = solve_expression(expression)
+                if result is not None:
+                    outfile.write(f"{line} = {result}\n")
+
+if __name__ == "__main__":
+    input_file_path = "input.txt" 
+    output_file_path = "output.txt" 
+
+    process_file(input_file_path, output_file_path)
+
+
+
+=================================================================>3
+
+# ! this is the third question solution
+
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import getpass
+import os
+
+def get_image_path():
+   
+    return os.path.join("C:", "Users", "lenovo", "OneDrive", "Desktop", "Igniter Assignment", "AdityaMishra Photo.jpeg")
+
+def create_email_body():
+    
+    name = input("Enter your name: ")
+    semester = input("Enter your semester: ")
+    branch = input("Enter your branch: ")
+    roll_number = input("Enter your roll number: ")
+
+    
+    return f"Name: {name}\nSemester: {semester}\nBranch: {branch}\nRoll Number: {roll_number}"
+
+def send_email():
+    
+    sender_email = "amishra37200@gmail.com"
+    receiver_email = "hr@ignitershub.com"
+    subject = "Challenge 3 Completed"
+
+   
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    
+    message.attach(MIMEText(create_email_body(), "plain"))
+
+    
+    image_filename = get_image_path()
+    with open(image_filename, "rb") as image_file:
+        image_data = image_file.read()
+
+    image = MIMEImage(image_data, name="Photo.jpeg")
+    message.attach(image)
+
+    
+    smtp_server = "your_smtp_server"  
+    smtp_port = 587
+    smtp_username = sender_email
+    smtp_password = getpass.getpass("Enter your email password: ")
+
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_username, smtp_password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    send_email()
+
+
+
+======================================================>4
+# this is the foth problem solution
+
+
+s=input('Enter the string:')
+if s==s[::-1]:
+    print('it is palindrome string')
+else:
+    print('it is not palindrome string')
+
+
+# output
+# Enter the string:rar
+# it is palindrome string
